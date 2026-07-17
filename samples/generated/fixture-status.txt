@@ -1,0 +1,1 @@
+PASS|supported_objects=5|excluded_point=1|excluded_block=1|units=Millimeters|tolerance_mm=0.01
