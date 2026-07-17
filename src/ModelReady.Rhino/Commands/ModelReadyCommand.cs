@@ -1,5 +1,7 @@
 using Rhino;
 using Rhino.Commands;
+using Rhino.UI;
+using ModelReady.Rhino.UI;
 
 namespace ModelReady.Rhino.Commands;
 
@@ -9,7 +11,16 @@ public sealed class ModelReadyCommand : Command
 
     protected override Result RunCommand(RhinoDoc doc, RunMode mode)
     {
-        RhinoApp.WriteLine("ModelReady v0.1 scaffold loaded. Preflight rules are not implemented yet.");
-        return Result.Success;
+        try
+        {
+            using var dialog = new ModelReadyDialog(doc);
+            dialog.ShowModal(RhinoEtoApp.MainWindowForDocument(doc));
+            return Result.Success;
+        }
+        catch (System.Exception exception)
+        {
+            RhinoApp.WriteLine($"ModelReady could not open: {exception.Message}");
+            return Result.Failure;
+        }
     }
 }

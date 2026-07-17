@@ -1,0 +1,1 @@
+PASS|supported_objects=5|duplicate_groups=1|tiny=1|far=1|default_layer=1|readiness=ReadyWithWarnings
