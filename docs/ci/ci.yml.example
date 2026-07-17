@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up .NET 10 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore
+        run: dotnet restore ModelReady.sln
+
+      - name: Build
+        run: dotnet build ModelReady.sln -c Release --no-restore -p:BuildYakPackage=false
+
+      - name: Test core
+        run: dotnet test tests/ModelReady.Core.Tests/ModelReady.Core.Tests.csproj -c Release --no-build

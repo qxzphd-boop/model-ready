@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <TargetExt>.rhp</TargetExt>
+    <NoWarn>NU1701</NoWarn>
+    <AssemblyName>ModelReady</AssemblyName>
+    <RootNamespace>ModelReady.Rhino</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Version>0.1.0</Version>
+    <Title>ModelReady</Title>
+    <Company>qxzphd-boop</Company>
+    <Description>One-click preflight checks for Rhino 8 architectural models.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="RhinoCommon" Version="8.18.25100.11001" ExcludeAssets="runtime" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ModelReady.Core\ModelReady.Core.csproj" />
+  </ItemGroup>
+
+  <Target Name="BuildYakPackage" AfterTargets="DispatchToInnerBuilds">
+    <PropertyGroup>
+      <YakExecutable Condition="$(YakExecutable) == '' and $([MSBuild]::IsOSPlatform(windows)) and Exists('C:\Program Files\Rhino 8\System\Yak.exe')">C:\Program Files\Rhino 8\System\Yak.exe</YakExecutable>
+      <YakExecutable Condition="$(YakExecutable) == '' and $([MSBuild]::IsOSPlatform(macos)) and Exists('/Applications/Rhino 8.app/Contents/Resources/bin/yak')">/Applications/Rhino 8.app/Contents/Resources/bin/yak</YakExecutable>
+      <BuildYakPackage Condition="$(BuildYakPackage) == '' and $(YakExecutable) != '' and Exists($(YakExecutable))">True</BuildYakPackage>
+    </PropertyGroup>
+
+    <Warning Text="Could not find Yak executable" Condition="$(YakExecutable) == ''" />
+
+    <ItemGroup>
+      <YakPackagesToDelete Include="$(OutputPath)\*.yak;$(OutputPath)\**\manifest.yml" />
+    </ItemGroup>
+
+    <Delete Files="@(YakPackagesToDelete)" />
+    <Exec Command="&quot;$(YakExecutable)&quot; spec" WorkingDirectory="$(OutputPath)" Condition="$(BuildYakPackage) == 'True'" />
+    <Exec Command="&quot;$(YakExecutable)&quot; build" WorkingDirectory="$(OutputPath)" Condition="$(BuildYakPackage) == 'True'" />
+  </Target>
+</Project>

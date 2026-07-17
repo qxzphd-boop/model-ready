@@ -1,0 +1,29 @@
+# .NET build outputs
+bin/
+obj/
+artifacts/
+TestResults/
+*.user
+*.suo
+
+# IDE files
+.vs/
+.vscode/*.log
+.idea/
+
+# Rhino build and package outputs
+dist/
+*.yak
+*.rhp
+*.rui
+
+# Local Rhino test files and generated reports
+samples/private/
+reports/
+*.3dmbak
+model-ready-report-*.html
+model-ready-report-*.json
+
+# Operating-system files
+.DS_Store
+Thumbs.db
