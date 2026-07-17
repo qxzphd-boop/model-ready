@@ -6,7 +6,7 @@ ModelReady is a local, non-destructive Rhino plug-in that turns scattered model-
 
 ## Status
 
-The v0.1 product specification and implementation plan are frozen. The Rhino-independent core engine and Rhino document snapshot adapter are implemented and tested in Rhino 8. The Eto.Forms interface, object location, and report export are later milestones.
+The v0.1 product specification and implementation plan are frozen. The Rhino-independent core engine, Rhino document snapshot adapter, and first Eto.Forms results dialog are implemented and tested in Rhino 8. Object location and report export are later milestones.
 
 - [v0.1 product specification](docs/superpowers/specs/2026-07-17-model-ready-v0.1-design.md)
 - [v0.1 implementation plan](docs/superpowers/plans/2026-07-17-model-ready-v0.1.md)
@@ -14,6 +14,7 @@ The v0.1 product specification and implementation plan are frozen. The Rhino-ind
 - [scaffold verification evidence](docs/test-evidence/scaffold.md)
 - [core preflight engine evidence](docs/test-evidence/core-preflight-engine.md)
 - [Rhino snapshot adapter evidence](docs/test-evidence/rhino-snapshot-adapter.md)
+- [preflight results dialog evidence](docs/test-evidence/preflight-dialog.md)
 - [GitHub Actions workflow template](docs/ci/ci.yml.example)
 
 ## v0.1 principles
@@ -24,7 +25,7 @@ The v0.1 product specification and implementation plan are frozen. The Rhino-ind
 - read-only scanning: no automatic deletion, repair, unlocking, or unhiding
 - one built-in profile: **Studio Submission**
 
-## Planned command
+## Rhino command
 
 Run `ModelReady` in Rhino, confirm the expected model units, and select **Run Preflight**.
 
@@ -36,7 +37,7 @@ The result is one of:
 
 ## Repository state
 
-The core engine provides immutable snapshots, the Studio Submission profile, seven ordered pure rules, readiness calculation, and exception-isolated scan orchestration. It deliberately has no RhinoCommon, filesystem, or UI dependency. The Rhino adapter filters supported top-level model geometry, converts measurements to metres, and supplies exact-duplicate groups to the core engine.
+The core engine provides immutable snapshots, the Studio Submission profile, seven ordered pure rules, readiness calculation, and exception-isolated scan orchestration. It deliberately has no RhinoCommon, filesystem, or UI dependency. The Rhino adapter filters supported top-level model geometry, converts measurements to metres, and supplies exact-duplicate groups to the core engine. The Eto.Forms dialog lets the user choose expected units, run repeatable scans without reopening the command, and review all seven ordered results. Locate and Export remain visibly disabled until their later milestones.
 
 Run the normal build and core tests with:
 
@@ -50,6 +51,7 @@ For the live adapter smoke test, start Rhino's `StartScriptServer`, find its pip
 ```powershell
 rhinocode --rhino <pipe-id> script tools/integration/CreateFixtureModel.cs
 rhinocode --rhino <pipe-id> script tools/integration/RunSnapshotSmokeTest.cs
+rhinocode --rhino <pipe-id> script tools/integration/RunDialogSmokeTest.cs
 ```
 
 The smoke script loads the Release plug-in assembly, so close that dedicated Rhino test instance before rebuilding the `.rhp` file.
