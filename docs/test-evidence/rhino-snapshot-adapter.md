@@ -25,6 +25,8 @@ Verified on 17 July 2026 with Rhino 8.18.25100.11001 on branch `agent/core-prefl
 - one block definition and one instance reference;
 - millimetre units and 0.01 mm absolute tolerance.
 
+The checked-in `.3dm` is treated as a fixed test asset. The script creates it only when missing; subsequent runs reuse it, and the smoke test validates its contents. This prevents Rhino's regenerated object identifiers and file metadata from making the Git worktree dirty on every verification run.
+
 Fixture result:
 
 ```text
