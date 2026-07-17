@@ -48,6 +48,7 @@ public sealed class ReadinessCalculatorTests
     public void Calculate_rejects_a_sequence_containing_null()
     {
         Assert.Throws<ArgumentException>(() => ReadinessCalculator.Calculate(new RuleResult[] { Result(FindingSeverity.Pass), null! }));
+        Assert.Throws<ArgumentException>(() => ReadinessCalculator.Calculate(new RuleResult[] { Result(FindingSeverity.Fail), null! }));
     }
 
     private static RuleResult Result(FindingSeverity severity)

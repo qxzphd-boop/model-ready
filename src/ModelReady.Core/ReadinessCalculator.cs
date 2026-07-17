@@ -14,6 +14,7 @@ public static class ReadinessCalculator
 
         var hasResult = false;
         var hasWarning = false;
+        var hasFailure = false;
 
         foreach (var result in results)
         {
@@ -25,10 +26,9 @@ public static class ReadinessCalculator
             hasResult = true;
             if (result.Severity == FindingSeverity.Fail)
             {
-                return ReadinessStatus.NotReady;
+                hasFailure = true;
             }
-
-            if (result.Severity == FindingSeverity.Warning)
+            else if (result.Severity == FindingSeverity.Warning)
             {
                 hasWarning = true;
             }
@@ -37,6 +37,11 @@ public static class ReadinessCalculator
         if (!hasResult)
         {
             throw new ArgumentException("At least one rule result is required.", nameof(results));
+        }
+
+        if (hasFailure)
+        {
+            return ReadinessStatus.NotReady;
         }
 
         return hasWarning ? ReadinessStatus.ReadyWithWarnings : ReadinessStatus.Ready;

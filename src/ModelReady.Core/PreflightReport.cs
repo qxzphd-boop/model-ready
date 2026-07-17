@@ -43,6 +43,17 @@ public sealed class PreflightReport
             throw new ArgumentException("A report must contain at least one result or error.", nameof(results));
         }
 
+        if (Errors.Count == 0 && readiness.HasValue)
+        {
+            var calculatedReadiness = ReadinessCalculator.Calculate(Results);
+            if (calculatedReadiness != readiness.Value)
+            {
+                throw new ArgumentException(
+                    $"Readiness '{readiness.Value}' does not match calculated readiness '{calculatedReadiness}'.",
+                    nameof(readiness));
+            }
+        }
+
         Readiness = readiness;
         Elapsed = elapsed;
     }

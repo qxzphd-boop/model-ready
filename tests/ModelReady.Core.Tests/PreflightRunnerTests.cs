@@ -101,6 +101,13 @@ public sealed class PreflightRunnerTests
             new[] { new RuleExecutionError("MR-TEST-002", "System.Exception", "Failed.") },
             ReadinessStatus.Ready,
             TimeSpan.Zero));
+        Assert.Throws<ArgumentException>(() => new PreflightReport(
+            RuleTestData.Document(),
+            RuleTestData.Profile(),
+            new[] { new RuleResult("MR-TEST-003", "Failing test", FindingSeverity.Fail, "Failed.", Array.Empty<Guid>()) },
+            Array.Empty<RuleExecutionError>(),
+            ReadinessStatus.Ready,
+            TimeSpan.Zero));
     }
 
     [Fact]
